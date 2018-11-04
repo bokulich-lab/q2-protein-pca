@@ -18,6 +18,7 @@ logger = logging.getLogger()
 class ProtAlign:
     def __init__(self, config_file):
         # load and validate the config
+        self.cwd = os.path.dirname(os.path.realpath(__file__))
         validator = validate.Validator()
         if config_file is None:
             self.config = {}
@@ -25,7 +26,7 @@ class ProtAlign:
             config_file,
             configspec=pkg_resources.resource_filename(
                 __name__,
-                '../config/ProtAlign.spec'))
+                '../config/ProtPCA.spec'))
         self.validated = self.config.validate(validator)
         if isinstance(self.validated, dict) or not self.validated:
             logger.error(pprint.pformat(self.validated))
@@ -37,6 +38,11 @@ class ProtAlign:
         self.main_loc = self.config['data']['inputs']['main_loc']
         self.all_seq_fasta = os.path.join(self.main_loc, self.config['data']['inputs']['input_fasta'])
         self.positions_file = os.path.join(self.main_loc, self.config['data']['inputs']['aln_slice_positions'])
+        if not os.path.isdir(os.path.join(self.main_loc, self.config['data']['outputs']['results_folder'])):
+            logger.warning('Path {} does not exist. Creating...'.format(
+                os.path.join(self.main_loc, self.config['data']['outputs']['results_folder'])
+            ))
+            os.mkdir(os.path.join(self.main_loc, self.config['data']['outputs']['results_folder']))
         self.all_seq_sliced = os.path.join(
             self.main_loc,
             self.config['data']['outputs']['results_folder'],
@@ -66,11 +72,12 @@ class ProtAlign:
         self.ClustalForceOverwrite = self.config['data']['inputs']['clustalo_overwrite']
 
         self.record_iterator = SeqIO.parse(self.all_seq_fasta, "fasta")
-        self.ids = [record.id for record in self.record_iterator]
-        self.seqs = [record.seq for record in self.record_iterator]
+        self.ids, self.seqs = list(), list()
+        for record in self.record_iterator:
+            self.ids.append(record.id)
+            self.seqs.append(record.seq)
         self.seq_lens = [len(seq) for seq in self.seqs]
-        self.sequences_df = pd.DataFrame({'ID': self.ids, 'Seqeunce': self.seqs, 'Length': self.seq_lens})
-
+        self.sequences_df = pd.DataFrame({'ID': self.ids, 'Sequence': self.seqs, 'Length': self.seq_lens})
         self.max_seq = max(self.seq_lens)
         self.min_seq = min(self.seq_lens)
         logger.info("The longest sequence is {0} AA long. The shortest sequence is {1} AA long."
@@ -94,7 +101,6 @@ class ProtAlign:
                 ))
                 self.positions = [(self.sequence_start, self.sequence_end) for id in self.ids]
         except IOError:
-            logger.warning("'Positions' file not found.")
             logger.warning("'Positions' file ({}) not found. Sequences will be sliced to {}-{}.".format(
                 self.positions_file, self.sequence_start, self.sequence_end
             ))
@@ -102,7 +108,7 @@ class ProtAlign:
         finally:
             logger.info("List of positions has {0} entries.".format(len(self.positions)))
             if len(self.ids) == len(self.seqs) == len(self.positions):
-                logger.info("Found and successfully processed {0} sequences.\n".format(len(self.ids)))
+                logger.info("Found and successfully processed {0} sequences.".format(len(self.ids)))
                 self.sequences_df['Slice_start'] = [x[0] for x in self.positions]
                 self.sequences_df['Slice_end'] = [x[1] for x in self.positions]
                 self.sequences_df['Slice_length'] = self.sequences_df['Slice_end'] - self.sequences_df['Slice_start']
@@ -120,8 +126,8 @@ class ProtAlign:
         return sequence[pos0:pos1] if pos1 <= len(sequence) else sequence
 
     def generate_sequence_slices(self):
-        self.sequences_df['Sliced_sequence'] = self.sequences_df['Sequence'].apply(
-            self.slice_sequence, **{'start': self.sequences_df['Slice_start'], 'end': self.sequences_df['Slice_end']})
+        self.sequences_df['Sliced_sequence'] = self.sequences_df.apply(
+            lambda row: self.slice_sequence(row['Sequence'], row['Slice_start'], row['Slice_end']), axis=1)
 
     def write_slices_to_fasta(self):
         """Writes sliced sequences to a new multi-line FASTA file"""
@@ -149,9 +155,9 @@ class ProtAlign:
     @staticmethod
     def convert_aln_to_fasta(aln_file, fasta_output):
         """convert ALN alignment file into FASTA format"""
-        with open(aln_file, 'r') as aln_file:
+        with open(aln_file, 'r') as aln_f:
             aln_fasta_file = open(fasta_output, 'w')
-            for line in aln_file.readlines():
+            for line in aln_f.readlines():
                 aln_fasta_file.write(line)
             aln_fasta_file.close()
         logger.info(f'File {aln_file} successfully converted to {fasta_output}.')

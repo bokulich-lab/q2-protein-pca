@@ -136,7 +136,7 @@ class ProtAlign:
                 f.write(f'>{row["ID"]}\n{row["Sliced_sequence"]}\n\n')
 
     def align_sequences(self):
-        logger.info('Aligning is starting...')
+        logger.info('Alignment is starting...')
         clustalo_cline = ClustalOmegaCommandline(self.clustalo_exe,
                                                  infile=self.all_seq_sliced,
                                                  outfile=self.clustal_out,
@@ -171,4 +171,4 @@ class ProtAlign:
         self.convert_aln_to_fasta(self.clustal_out, self.clustal_out_fasta)
         self.timestamp_end = datetime.now()
         self.completion_time = (self.timestamp_end - self.timestamp_start) / timedelta(minutes=1)
-        logger.info('Alignment sequence completed in {:0.1f} minutes'.format(self.completion_time))
+        logger.info('Sequence alignment completed in {:0.1f} minutes'.format(self.completion_time))

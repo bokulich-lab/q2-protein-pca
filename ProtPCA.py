@@ -3,12 +3,16 @@ import sys
 from ProtPCA.arguments import create_argument_parser
 from ProtPCA.alignment import ProtAlign
 from ProtPCA.helpers import set_logger
+from ProtPCA.ranking import ProtRank
 
 
 def run(args):
     logger = set_logger(args.verbosity, log_to_stdout=True)
     prot_align = ProtAlign(args.config_file)
     prot_align.run()
+
+    prot_rank = ProtRank(args.config_file, prot_align_obj=prot_align)
+    prot_rank.run()
 
 
 if __name__ == '__main__':

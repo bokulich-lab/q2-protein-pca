@@ -21,6 +21,7 @@ class ProtRank:
         self.timestamp_start = datetime.now()
         self.timestamp_end = None
         self.completion_time = None
+        self.ranked = False
         if prot_align_obj is None:
             # load and validate the config
             self.cwd = os.path.dirname(os.path.realpath(__file__))
@@ -159,6 +160,7 @@ class ProtRank:
         aa_ranks = occur_freq.progress_apply(self.rank_alphabet, axis=0)
         # replace original AAs with their ranks
         aln_df_ranked = aln_df.replace(aa_ranks)
+        self.ranked = True
         logger.info('Ranking completed.')
         return aln_df_ranked
 

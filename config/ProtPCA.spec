@@ -9,3 +9,6 @@
         sequence_end = integer(default=-1)
     [[outputs]]
         results_folder = string(default='analysis')
+[analysis]
+    frac_pca_components = float(min=0.05, max=1.0, default=0.1)
+    components_to_project = integer(default=2)

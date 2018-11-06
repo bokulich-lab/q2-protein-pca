@@ -6,3 +6,12 @@ class SequenceMismatch(Exception):
 
 class MissingClustalOExecutable(Exception):
     pass
+
+class AlignmentNotRanked(Exception):
+    pass
+
+class RankImportError(Exception):
+    pass
+
+class PCANotFitted(Exception):
+    pass

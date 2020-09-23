@@ -9,7 +9,7 @@ from Bio import Entrez
 
 
 def set_logger(verbosity, log_to_stdout=False, log_file=None,
-               log_format='%(asctime)s %(levelname)s\t%(message)s'):
+               log_format='[%(asctime)s] [%(levelname)s] [%(name)s]\t%(message)s'):
     """ Sets a logger for the micro service
     Args:
         verbosity (int): Level of verbosity for the logger (1,2,3)

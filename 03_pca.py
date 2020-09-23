@@ -197,34 +197,7 @@ loadings_figure_2D.savefig(subfolder + "/Fig2_loadings.png", dpi=1200)
 
 ############################### transform the 'alignment positions' into real positions and plot again
 
-def get_positions(list_with_positions, list_with_values):
-    l = []
-    for i in range(len(list_with_positions)):
-        l.append([list_with_positions[i], list_with_values[list_with_positions[i]]])
-    return l
 
-def locate_positions(x_coords, y_coords, conserved_coff=0.1, variable_coff=0.4):
-    def eucl_dist(xval, yval):
-        from numpy import sqrt
-        return sqrt(xval ** 2 + yval ** 2)
-
-    e_distances = [eucl_dist(x, y) for (x, y) in zip(x_coords, y_coords)]
-    max_e = max(e_distances)
-    conserved_positions = []
-    variable_positions = []
-    other_positions = []
-
-    for i in range(len(x_coords)):
-        x = x_coords[i]
-        y = y_coords[i]
-        e_dist = eucl_dist(x, y)
-        if e_dist < conserved_coff * max_e:
-            conserved_positions.append([i, x, y])
-        elif e_dist > variable_coff * max_e:
-            variable_positions.append([i, x, y])
-        else:
-            other_positions.append([i, x, y])
-    return conserved_positions, variable_positions, other_positions
 
 
 cons_pos_both, var_pos_both, left_pos_both = locate_positions(loadX, loadY, conserved_coff=0.1, variable_coff=0.5)

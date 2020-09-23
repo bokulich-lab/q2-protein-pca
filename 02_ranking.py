@@ -14,13 +14,13 @@ for seq_record in SeqIO.parse(subfolder + "/full_alignment.fasta", "fasta"):
     al_seq = my_split(str(seq_record.seq))
     master_list.append(al_seq)
 
-col_names = [('pos' + str(x)) for x in range(len(master_list[0]))]
+col_names = [f'pos{x}' for x in range(len(master_list[0]))]
 
 aln_df = pd.DataFrame(master_list)  # turn the list of lists into a DataFrame
 aln_df.columns = col_names
 org_data = aln_df.copy()  # stores a copy of the original dataset
 
-occur_freq = aln_df.apply(pd.value_counts).fillna(0)
+occur_freq = get_occurrences(aln_df)
 
 ################################# replace amino acid letters with corresponding ranks ##############################
 print("Ranking positions...")

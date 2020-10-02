@@ -8,8 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
 
-from protein_pca import exceptions
-from protein_pca.ranking import ProtRank
+from q2_protein_pca.archived import exceptions
 
 # import matplotlib.pyplot as plt
 # import matplotlib.patches as mpatches

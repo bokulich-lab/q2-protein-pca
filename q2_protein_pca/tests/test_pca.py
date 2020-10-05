@@ -4,6 +4,7 @@ from qiime2.plugin.testing import TestPluginBase
 from skbio import OrdinationResults
 
 from q2_protein_pca import pca
+from q2_protein_pca._plot import plot_loadings
 
 
 class RankingTests(TestPluginBase):
@@ -32,3 +33,10 @@ class RankingTests(TestPluginBase):
 
         self.assertEqual(str(result_scores), str(expected_scores))
         self.assertEqual(str(result_loadings), str(expected_loadings))
+
+    def test_visualisation(self):
+        input_fp = self.get_data_path('aligned-protein-pca-loadings-1.txt')
+        input_loadings = skbio.io.registry.read(file=input_fp, into=OrdinationResults)
+
+        result = plot_loadings("some_dir", input_loadings)
+        print(result)

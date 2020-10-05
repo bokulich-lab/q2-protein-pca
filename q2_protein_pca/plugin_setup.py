@@ -80,6 +80,16 @@ plugin.methods.register_function(
     citations=[citations['Wang2014']]
 )
 
+plugin.visualizers.register_function(
+    function=q2_protein_pca.plot_loadings,
+    inputs={'pca_loadings': PCoAResults},
+    parameters={},
+    input_descriptions={'pca_loadings': 'PCA loadings.'},
+    parameter_descriptions={},
+    name='Test visualizer',
+    description=('Test visualizer description.')
+)
+
 # base_parameters = {
 #     'metadata': Metadata,
 #     'latitude': Str,

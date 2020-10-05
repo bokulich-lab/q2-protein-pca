@@ -8,8 +8,9 @@
 
 from ._alignment import mafft
 from ._pca import pca
+from ._plot import plot_loadings
 from ._ranking import rank_alignment
 
 __version__ = "0.0.0-dev"
 
-__all__ = ['mafft', 'pca', 'rank_alignment']
+__all__ = ['mafft', 'pca', 'plot_loadings', 'rank_alignment']

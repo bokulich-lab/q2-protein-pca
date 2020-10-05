@@ -27,7 +27,13 @@ setup(
         ['q2-protein-pca=q2_protein_pca.plugin_setup:plugin']
     },
     package_data={
-        'q2_protein_pca': ['data/index.html', 'citations.bib'],
+        'q2_protein_pca': [
+            'data/index.html',
+            'citations.bib',
+            'assets/loadings/index.html',
+            'assets/loadings/css/*',
+            'assets/loadings/js/*'
+        ],
         'q2_protein_pca.tests': ['data/*'],
     },
     zip_safe=False,

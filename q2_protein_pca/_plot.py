@@ -97,7 +97,7 @@ def _generate_spec(plot_values: pd.DataFrame,
                          },
                          {'value': 0.8}],
                      'tooltip': {
-                         'signal': "{{'title': 'position ' + datum['id'], "
+                         'signal': f"{{'title': 'position ' + datum['id'], "
                                    f"'{x_col_name}': datum['{x_col_name}'], "
                                    f"'{y_col_name}': datum['{y_col_name}']}}"}
                  }}}]}
@@ -139,10 +139,6 @@ def _plot_loadings(
     context['vega_spec'] = json.dumps(spec)
     context['max_count'] = plot_values.shape[0]
     context['max_distance'] = plot_values['euclid_dist'].max()
-
-    # TODO: this probably can be skipped and the data can be fetched
-    #  from vega_spec in index.html
-    context['pca_data'] = plot_values.to_json(orient='records')
 
     copy_tree(os.path.join(TEMPLATES, 'loadings'), output_dir)
 

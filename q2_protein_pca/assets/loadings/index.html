@@ -194,10 +194,6 @@
   </div>
 </div>
 
-<script id="table-data" type="application/json">
-  {{ pca_data }}
-</script>
-
 <script id="position-data" type="application/json">
   {{ position_data }}
 </script>
@@ -215,7 +211,9 @@
     var textField = document.getElementById('text-field');
     var sequenceIdField = document.getElementById('id-picker')
 
-    var pcaData = JSON.parse(document.getElementById("table-data").innerHTML);
+    var pcaData = JSON.parse(document.getElementById('spec').innerHTML).data[0].values
+    console.log(pcaData)
+    console.log(spec)
     var positions = JSON.parse(document.getElementById("position-data").innerHTML);
     var seqIDs = Object.keys(positions)
 

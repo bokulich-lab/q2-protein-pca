@@ -1,14 +1,10 @@
-from q2_types.feature_data import RankedProteinAlignmentFormat
 import numpy as np
 import pandas as pd
 from skbio import OrdinationResults
 from sklearn.decomposition import PCA
 
 
-def _pca(ranks_fp: str, n_components: int = None) -> (OrdinationResults, OrdinationResults):
-    # read in ranks
-    ranks_df = pd.read_csv(ranks_fp, sep=",", index_col="Sequence ID")
-
+def _pca(ranks_df: pd.DataFrame, n_components: int = None) -> (OrdinationResults, OrdinationResults):
     # perform PCA
     pca_result = PCA(n_components=n_components)
     pca_result.fit(ranks_df)
@@ -42,7 +38,6 @@ def _pca(ranks_fp: str, n_components: int = None) -> (OrdinationResults, Ordinat
     return ores_scores, ores_loadings
 
 
-def pca(ranks: RankedProteinAlignmentFormat,
+def pca(ranks: pd.DataFrame,
         n_components: int = None) -> (OrdinationResults, OrdinationResults):
-    ranks_fp = str(ranks)
-    return _pca(ranks_fp, n_components)
+    return _pca(ranks, n_components)

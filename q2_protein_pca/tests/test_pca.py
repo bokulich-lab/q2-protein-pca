@@ -1,19 +1,19 @@
+import pandas as pd
 import skbio
-from q2_types.feature_data import RankedProteinAlignmentFormat
 from qiime2.plugin.testing import TestPluginBase
 from skbio import OrdinationResults
 
 from q2_protein_pca import pca
-from q2_protein_pca._plot import plot_loadings
+from q2_protein_pca._format import RankedProteinAlignmentFormat
 
 
-class RankingTests(TestPluginBase):
+class PCATests(TestPluginBase):
 
     package = 'q2_protein_pca.tests'
 
     def _prepare_sequences(self):
         input_fp = self.get_data_path('aligned-protein-ranks-1.csv')
-        input_sequences = RankedProteinAlignmentFormat(input_fp, mode='r')
+        input_sequences = RankedProteinAlignmentFormat(input_fp, mode='r').view(pd.DataFrame)
 
         exp_scores_fp = self.get_data_path('aligned-protein-pca-scores-1.txt')
         expected_scores = skbio.io.registry.read(file=exp_scores_fp, into=OrdinationResults)
@@ -33,10 +33,3 @@ class RankingTests(TestPluginBase):
 
         self.assertEqual(str(result_scores), str(expected_scores))
         self.assertEqual(str(result_loadings), str(expected_loadings))
-
-    def test_visualisation(self):
-        input_fp = self.get_data_path('aligned-protein-pca-loadings-1.txt')
-        input_loadings = skbio.io.registry.read(file=input_fp, into=OrdinationResults)
-
-        result = plot_loadings("some_dir", input_loadings)
-        print(result)

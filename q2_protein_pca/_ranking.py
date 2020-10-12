@@ -1,10 +1,9 @@
 import pandas as pd
-import skbio
-from q2_types.feature_data import AlignedProteinFASTAFormat, RankedProteinAlignmentFormat
+from q2_types.feature_data._transformer import AlignedProteinIterator
 
 
 def _get_occurrences(df):
-    return df.apply(pd.value_counts).fillna(0).astype("int64")
+    return df.apply(pd.value_counts).fillna(0).astype("int32")
 
 
 def _rank_alphabet(pd_series):
@@ -75,28 +74,17 @@ def _rank_columns(alignment_df: pd.DataFrame) -> pd.DataFrame:
     return aln_df_ranked
 
 
-def _rank(sequences: str) -> RankedProteinAlignmentFormat:
-    # for seq in skbio.io.read(sequences, format='fasta',
-    #                           constructor=skbio.Protein):
-    #     id = seq.metadata['id']
-
+def _rank(sequences: AlignedProteinIterator) -> pd.DataFrame:
     master_list, seq_ids = [], []
-    for seq_record in skbio.io.registry.read(sequences, format='fasta'):
-    # for seq_record in SeqIO.parse(sequences, 'fasta'):
+    for seq_record in sequences:
         master_list.append(list(seq_record.values.astype('str')))
         seq_ids.append(seq_record.metadata['id'])
     col_names = [f"pos{x+1}" for x in range(len(master_list[0]))]
     alignment_df = pd.DataFrame(master_list, columns=col_names, index=seq_ids)
     ranking_table = _rank_columns(alignment_df)
 
-    result = RankedProteinAlignmentFormat()
-    result_fp = str(result)
-
-    ranking_table.to_csv(result_fp, sep=",", header=True, index=True)
-
-    return result
+    return ranking_table.astype('int64')
 
 
-def rank_alignment(sequences: AlignedProteinFASTAFormat) -> RankedProteinAlignmentFormat:
-    sequences_fp = str(sequences)
-    return _rank(sequences_fp)
+def rank_alignment(sequences: AlignedProteinIterator) -> pd.DataFrame:
+    return _rank(sequences)

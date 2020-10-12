@@ -1,5 +1,9 @@
+import numpy as np
+import pandas as pd
 import skbio
 import skbio.io
+from q2_types.feature_data._transformer import AlignedProteinIterator
+
 from q2_types.feature_data import ProteinFASTAFormat, AlignedProteinFASTAFormat
 from q2_alignment._mafft import run_command
 
@@ -98,6 +102,26 @@ def _mafft(sequences_fp, alignment_fp, n_threads, parttree):
     return result
 
 
+def _map_positions(aligned_sequences: AlignedProteinIterator) -> pd.DataFrame:
+    mapping_df = pd.DataFrame()
+    for aln_seq_record in aligned_sequences:
+        id_aln = aln_seq_record.metadata['id']
+        seq_aln = pd.Series(aln_seq_record.values.astype('str'), name=id_aln)
+
+        seq_aln_degapped = seq_aln[seq_aln != "-"]
+        original_positions = pd.Series([int(x) for x in range(len(seq_aln_degapped.index))], index=seq_aln_degapped.index)
+        seq_aln[seq_aln != "-"] = original_positions
+        seq_aln.replace(to_replace="-", value=np.nan, inplace=True)
+        seq_aln = seq_aln.astype('Int64')
+
+        mapping_df = pd.concat([mapping_df, seq_aln], axis=1)
+
+    mapping_df.index.name = 'Alignment position'
+    mapping_df.index = mapping_df.index.astype('int64')
+
+    return mapping_df
+
+
 def mafft(sequences: ProteinFASTAFormat,
           n_threads: int = 1,
           parttree: bool = False) -> AlignedProteinFASTAFormat:
@@ -105,10 +129,6 @@ def mafft(sequences: ProteinFASTAFormat,
     return _mafft(sequences_fp, None, n_threads, parttree)
 
 
-# def mafft_add(alignment: AlignedProteinFASTAFormat,
-#               sequences: ProteinFASTAFormat,
-#               n_threads: int = 1,
-#               parttree: bool = False) -> AlignedProteinFASTAFormat:
-#     alignment_fp = str(alignment)
-#     sequences_fp = str(sequences)
-#     return _mafft(sequences_fp, alignment_fp, n_threads, parttree)
+def map_positions(
+        aligned_sequences: AlignedProteinIterator) -> pd.DataFrame:
+    return _map_positions(aligned_sequences)

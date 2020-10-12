@@ -17,16 +17,16 @@ def _mafft(sequences_fp, alignment_fp, n_threads, parttree):
     aligned_seq_ids = {}
     unaligned_seq_ids = {}
 
-    if alignment_fp is not None:
-        for seq in skbio.io.read(alignment_fp, format='fasta',
-                                 constructor=skbio.Protein):
-            id_ = seq.metadata['id']
-            if id_ in aligned_seq_ids:
-                raise ValueError(
-                    "A sequence ID is duplicated in the aligned sequences: "
-                    "%r" % id_)
-            else:
-                aligned_seq_ids[id_] = True
+    # if alignment_fp is not None:
+    #     for seq in skbio.io.read(alignment_fp, format='fasta',
+    #                              constructor=skbio.Protein):
+    #         id_ = seq.metadata['id']
+    #         if id_ in aligned_seq_ids:
+    #             raise ValueError(
+    #                 "A sequence ID is duplicated in the aligned sequences: "
+    #                 "%r" % id_)
+    #         else:
+    #             aligned_seq_ids[id_] = True
 
     for seq in skbio.io.read(sequences_fp, format='fasta',
                              constructor=skbio.Protein):

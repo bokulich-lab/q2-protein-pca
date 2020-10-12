@@ -74,7 +74,7 @@ EXPECTED_SPEC = {
                          },
                          {'value': 0.8}],
                      'tooltip': {
-                         'signal': "{{'title': 'position ' + datum['id'], "
-                                   "'PC1': datum['PC1'], "
-                                   "'PC2': datum['PC2']}"}
+                         'signal': f"{{'title': 'position ' + datum['id'], "
+                                   f"'PC1': datum['PC1'], "
+                                   f"'PC2': datum['PC2']}}"}
                  }}}]}

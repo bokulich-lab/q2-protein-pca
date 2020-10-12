@@ -14,10 +14,12 @@ class RankingTests(TestPluginBase):
 
     def _prepare_sequences(self):
         input_fp = self.get_data_path('aligned-protein-sequences-1.fasta')
-        input_sequences = AlignedProteinFASTAFormat(input_fp, mode='r').view(AlignedProteinIterator)
+        input_sequences = AlignedProteinFASTAFormat(
+            input_fp, mode='r').view(AlignedProteinIterator)
 
         ranks_fp = self.get_data_path('aligned-protein-ranks-1.csv')
-        expected_ranks = RankedProteinAlignmentFormat(ranks_fp, mode='r').view(pd.DataFrame)
+        expected_ranks = RankedProteinAlignmentFormat(
+            ranks_fp, mode='r').view(pd.DataFrame)
 
         return input_sequences, expected_ranks
 

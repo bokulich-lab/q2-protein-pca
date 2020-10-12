@@ -109,7 +109,8 @@ def _map_positions(aligned_sequences: AlignedProteinIterator) -> pd.DataFrame:
         seq_aln = pd.Series(aln_seq_record.values.astype('str'), name=id_aln)
 
         seq_aln_degapped = seq_aln[seq_aln != "-"]
-        original_positions = pd.Series([int(x) for x in range(len(seq_aln_degapped.index))], index=seq_aln_degapped.index)
+        original_positions = pd.Series([int(x) for x in range(
+            len(seq_aln_degapped.index))], index=seq_aln_degapped.index)
         seq_aln[seq_aln != "-"] = original_positions
         seq_aln.replace(to_replace="-", value=np.nan, inplace=True)
         seq_aln = seq_aln.astype('Int64')

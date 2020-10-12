@@ -4,7 +4,8 @@ from skbio import OrdinationResults
 from sklearn.decomposition import PCA
 
 
-def _pca(ranks_df: pd.DataFrame, n_components: int = None) -> (OrdinationResults, OrdinationResults):
+def _pca(ranks_df: pd.DataFrame,
+         n_components: int = None) -> (OrdinationResults, OrdinationResults):
     # perform PCA
     pca_result = PCA(n_components=n_components)
     pca_result.fit(ranks_df)
@@ -13,7 +14,8 @@ def _pca(ranks_df: pd.DataFrame, n_components: int = None) -> (OrdinationResults
     ranks_transformed = pd.DataFrame(pca_result.transform(ranks_df))
     ranks_transformed.index = ranks_df.index
 
-    components_loadings = pd.DataFrame(-1 * pca_result.components_.T * np.sqrt(pca_result.explained_variance_))
+    components_loadings = pd.DataFrame(-1 * pca_result.components_.T *
+                                       np.sqrt(pca_result.explained_variance_))
     components_loadings.index = ranks_df.columns
     eigenvalues = pd.Series(pca_result.explained_variance_)
 

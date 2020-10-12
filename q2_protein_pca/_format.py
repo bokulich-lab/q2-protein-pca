@@ -86,8 +86,8 @@ def _validate_file_not_empty(has_data):
 
 class PositionMappingFormat(model.TextFileFormat):
     def _validate_(self, level):
-        n_records = {'min': 10, 'max': None}[level]
-        with self.open() as fh:
+        # n_records = {'min': 10, 'max': None}[level]
+        with self.open():
             # # validate header
             # # for now we will not validate any information in the header.
             # line = fh.readline()

@@ -12,7 +12,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='q2-protein-pca',
-    version='2020.11',
+    version='2020.08',
     license='BSD-3-Clause',
     packages=find_packages(),
     install_requires=['biopython>=1.78', 'scikit-learn', 'pandas',

@@ -23,11 +23,13 @@ def _rank_alphabet(pd_series):
 
     # group by count of occurrences
     all_occurrences = test_rank.groupby(test_rank).agg("count")
-    # list how many AAs with given count (no of occur, no of aas) in a count descending order
+    # list how many AAs with given count (no of occur, no of aas) in a count
+    # descending order
     list_of_rep_aas = sorted(
         list(all_occurrences.iteritems()), key=lambda x: x[0], reverse=True
     )
-    # generates a list of tuples containing the amino acid and its occurrence frequency, e.g.:
+    # generates a list of tuples containing the amino acid and
+    # its occurrence frequency, e.g.:
     # [('A', 10), ('C', 10), ('S', 0), ('R', 0), ('B', 0), ('D', 0) ... ]
     all_items = list(test_rank.iteritems())
     all_items_ranked = []

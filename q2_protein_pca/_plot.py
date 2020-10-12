@@ -25,7 +25,8 @@ def _generate_spec(plot_values: pd.DataFrame,
         'height': 300,
         'data': [
             {'name': 'values',
-             'values': plot_values.replace({np.nan: None}).to_dict(orient='records')},
+             'values': plot_values.replace(
+                 {np.nan: None}).to_dict(orient='records')},
         ],
         'scales': [
             {'name': 'xScale',
@@ -82,14 +83,16 @@ def _generate_spec(plot_values: pd.DataFrame,
                  'update': {
                      'fill': [
                          {
-                             'test': "datum.euclid_dist / datum.max_distance <= (1 - conservationLevel / 100)",
+                             'test': "datum.euclid_dist / datum.max_distance "
+                                     "<= (1 - conservationLevel / 100)",
                              'value': '#3182bd'
                          },
                          {'value': 'black'}
                      ],
                      'opacity': [
                          {
-                             'test': "datum[sequenceID] == null && hideMissingPositions",
+                             'test': "datum[sequenceID] == null "
+                                     "&& hideMissingPositions",
                              'value': 0.0
                          },
                          {'value': 0.8}],

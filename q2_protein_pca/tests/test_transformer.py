@@ -7,7 +7,6 @@
 # ----------------------------------------------------------------------------
 import pandas as pd
 import pandas.util.testing as pdt
-import pkg_resources
 
 from qiime2.plugin.testing import TestPluginBase
 from q2_protein_pca._format import (

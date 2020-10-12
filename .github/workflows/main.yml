@@ -24,19 +24,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-#      - name: fetch conda requirements
-#        run: wget https://data.qiime2.org/distro/core/qiime2-2020.8-py36-linux-conda.yml
-      - uses: conda-incubator/setup-miniconda@v1
+      - name: set up conda
+        uses: conda-incubator/setup-miniconda@v1
         with:
           python-version: 3.6
           channels: conda-forge,bioconda,qiime2,defaults
           channel-priority: true
           add-pip-as-python-dependency: true
           activate-environment: qiime2-protein
-#          environment-file: qiime2-2020.8-py36-linux-conda.yml
-      - shell: bash -l {0}
+      - name: run tests with coverage
+        shell: bash -l {0}
         run: |
-          conda install -y qiime2 q2cli q2templates q2-types q2-alignment pytest-cov
+          conda install -y -q qiime2 q2cli q2templates q2-types q2-alignment pytest-cov "pandas=>0.25.3"
           pip install https://github.com/misialq/q2-types/archive/protein-seqs.zip
           pip install .
           qiime dev refresh-cache

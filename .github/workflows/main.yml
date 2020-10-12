@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: set up conda
+      - name: Set up conda
         uses: conda-incubator/setup-miniconda@v1
         with:
           python-version: 3.6
@@ -32,10 +32,10 @@ jobs:
           channel-priority: true
           add-pip-as-python-dependency: true
           activate-environment: qiime2-protein
-      - name: run tests with coverage
+      - name: Run tests with coverage
         shell: bash -l {0}
         run: |
-          conda install -y -q qiime2 q2cli q2templates q2-types q2-alignment pytest-cov "pandas=>0.25.3"
+          conda install -y -q qiime2 q2cli q2templates q2-types q2-alignment pytest-cov "pandas==0.25.3"
           pip install https://github.com/misialq/q2-types/archive/protein-seqs.zip
           pip install .
           qiime dev refresh-cache

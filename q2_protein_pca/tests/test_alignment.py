@@ -1,6 +1,6 @@
 import pandas as pd
 import pandas.testing as pdt
-from q2_types.feature_data._transformer import AlignedProteinIterator, ProteinIterator
+from q2_types.feature_data._transformer import AlignedProteinIterator
 
 from q2_protein_pca._format import PositionMappingFormat
 from q2_types.feature_data import AlignedProteinFASTAFormat, ProteinFASTAFormat

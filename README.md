@@ -91,10 +91,10 @@ q2 protein-pca plot-loadings --i-pca-loadings thioredoxin-pca-loadings.qza --i-p
 ```
 
 The scores plot obtained in the first visualisation should look something like:
-<img src="sample_data/img/thioredoxin-pca-scores.png" alt="PCA scores" width="200"/>
+![PCA scores](sample_data/img/thioredoxin-pca-scores.png). 
 Different colours represent different kingdoms. Using
 the second plot we can identify the most conserved positions within the thioredoxin sequence:
-<img src="sample_data/img/thioredoxin-pca-loadings.png" alt="PCA loadings" width="200">
+![PCA scores](sample_data/img/thioredoxin-pca-loadings.png)
 
 On the visualisation page you can select the level of conservation you are interested in: setting to 90% would highlight all positions
 whose distance from the PC space origin does not exceed more than 10% of the distance to the furthest point. Additionally, 

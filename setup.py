@@ -31,8 +31,7 @@ setup(
             'data/index.html',
             'citations.bib',
             'assets/loadings/index.html',
-            'assets/loadings/css/*',
-            'assets/loadings/js/*'
+            'assets/loadings/vega/*',
         ],
         'q2_protein_pca.tests': ['data/*'],
     },

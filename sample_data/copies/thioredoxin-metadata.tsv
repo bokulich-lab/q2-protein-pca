@@ -1,0 +1,29 @@
+sample-id	organism	domain	kingdom
+#q2:types	categorical	categorical	categorical
+YP_177815.1	M. tuberculosis	Bacteria	Eubacteria
+BAJ69732.1	B. longum	Bacteria	Eubacteria
+PCL43757.1	L. rhamnosus	Bacteria	Eubacteria
+GAX68512.1	S. cerevisiae	Eukarya	Fungi
+AAF87085.1	H. sapiens	Eukarya	Animals
+NP_035790.1	M. musculus	Eukarya	Animals
+CAA84613.1	A. thaliana	Eukarya	Plants
+KZN94295.1	P. chrysogenum	Eukarya	Fungi
+XP_023462122.1	R. microsporus	Eukarya	Fungi
+KAF1806894.1	M. lusitanicus	Eukarya	Fungi
+ADX53128.1	E. coli	Bacteria	Eubacteria
+SJN15429.1	V. casei	Bacteria	Eubacteria
+NP_776393.1	B. taurus	Eukarya	Animals
+NP_001002461.1	D. rerio	Eukarya	Animals
+XP_031951646.1	C. moneduloides	Eukarya	Animals
+ABD65296.1	S. berthaultii	Eukarya	Plants
+BAA25681.1	B. rapa	Eukarya	Plants
+XP_008341530.2	M. domestica	Eukarya	Plants
+ACV58276.1	A. acidocaldarius	Bacteria	Eubacteria
+AVB75452.1	M. maripaludis	Archaea	Archaebacteria
+AAY79471.1	S. acidocaldarius	Archaea	Archaebacteria
+QCP91972.1	H. marismortui	Archaea	Archaebacteria
+WP_042615683.1	A. tumefaciens	Bacteria	Eubacteria
+CPM99217.1	S. aureus	Bacteria	Eubacteria
+BAB59933.1	T. volcanium	Archaea	Archaebacteria
+WP_052358751.1	A. fulgidus	Archaea	Archaebacteria
+GAQ43562.1	A. niger	Eukarya	Fungi

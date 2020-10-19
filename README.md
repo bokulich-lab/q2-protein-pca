@@ -107,8 +107,8 @@ are strictly conserved in all organisms (positions 33 and 36 in *E. coli*'s thio
 important for maintaining thioredoxin's redox properties and stability appear as (nearly)-strictly conserved (positions 41 and 77).
 
 For more details about the ranking method that this plugin implements, head to [Wang & Kennedy (2014)](https://doi.org/10.1007/s10969-014-9173-2). If you want to see
-another, more realistic example of how this method can be applied, check out [Ziemski et al. (2018)](https://doi.org/10.7554/eLife.34055) which looked at more and less known 
-members of a AAA+ protein family. If you want to read more about thioredoxins themselves, you can start by going through
+another, more realistic example of how this method can be applied, check out [Ziemski et al. (2018)](https://doi.org/10.7554/eLife.34055) which analysed an unknown, actinobacterial
+protein family in the context of a large AAA+ protein superfamily. If you want to read more about thioredoxins themselves, you can start by going through
 this review: [Collet & Messens (2010)](https://doi.org/10.1089/ars.2010.3114).
 
 ## References

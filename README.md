@@ -24,7 +24,7 @@ pip install https://github.com/misialq/q2-types/archive/protein-seqs.zip
 Finally, install q2-protein-pca:
 
 ```
-pip install git+https://github.com/misialq/pca-protein-analysis.git
+pip install git+https://github.com/bokulich-lab/q2-protein-pca.git
 ```
 
 To see actions available within the q2-protein-pca plugin:

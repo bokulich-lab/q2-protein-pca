@@ -107,8 +107,13 @@ def _generate_spec(plot_values: pd.DataFrame,
 def _plot_loadings(
         output_dir: str,
         pca_loadings_df: pd.DataFrame,
-        positions_mapping: pd.DataFrame):
+        positions_mapping: pd.DataFrame,
+        pdb_id: str,
+        nterm_offset: int):
     context = dict()
+
+    # convert to 1-based indexing
+    positions_mapping += 1
     context['position_data'] = positions_mapping.to_json(orient='records')
 
     positions_mapping.index = pca_loadings_df.index
@@ -139,6 +144,9 @@ def _plot_loadings(
     context['vega_spec'] = json.dumps(spec)
     context['max_count'] = plot_values.shape[0]
     context['max_distance'] = plot_values['euclid_dist'].max()
+    if pdb_id:
+        context['pdb_id'] = pdb_id
+        context['nterm_offset'] = nterm_offset
 
     copy_tree(os.path.join(TEMPLATES, 'loadings'), output_dir)
 
@@ -149,6 +157,9 @@ def _plot_loadings(
 def plot_loadings(
         output_dir: str,
         pca_loadings: OrdinationResults,
-        positions_mapping: pd.DataFrame) -> None:
+        positions_mapping: pd.DataFrame,
+        pdb_id: str = None,
+        nterm_offset: int = 1) -> None:
     loadings_df = pca_loadings.samples
-    _plot_loadings(output_dir, loadings_df, positions_mapping)
+    _plot_loadings(
+        output_dir, loadings_df, positions_mapping, pdb_id, nterm_offset)

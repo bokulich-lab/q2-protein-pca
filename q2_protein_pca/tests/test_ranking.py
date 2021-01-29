@@ -1,3 +1,4 @@
+from itertools import islice
 import pandas as pd
 import pandas.testing as pdt
 from q2_types.feature_data import AlignedProteinFASTAFormat
@@ -6,6 +7,8 @@ from qiime2.plugin.testing import TestPluginBase
 
 from q2_protein_pca import rank_alignment
 from q2_protein_pca._format import RankedProteinAlignmentFormat
+from q2_protein_pca._ranking import (
+    _get_occurrences, _df_from_sequences, _rank_alphabet, _rank_columns)
 
 
 class RankingTests(TestPluginBase):
@@ -23,8 +26,77 @@ class RankingTests(TestPluginBase):
 
         return input_sequences, expected_ranks
 
+    def test_df_from_sequences(self):
+        input_seqs, _ = self._prepare_sequences()
+        input_seqs = islice(input_seqs, 2)
+
+        obs_df = _df_from_sequences(input_seqs)
+        exp_df = pd.DataFrame(
+            {"pos1": ["A", "A"], "pos2": ["A", "C"], "pos3": ["A", "C"],
+             "pos4": ["C", "D"], "pos5": ["F", "G"], "pos6": ["C", "C"],
+             "pos7": ["C", "D"], "pos8": ["D", "E"], "pos9": ["A", "A"]},
+            index=["seq0", "seq1"])
+        pdt.assert_frame_equal(obs_df, exp_df)
+
+    def test_get_occurences(self):
+        input_df = pd.DataFrame({"pos1": ["A", "A", "A", "A"],
+                                 "pos2": ["-", "B", "B", "D"],
+                                 "pos3": ["A", "C", "A", "-"],
+                                 "pos4": ["-", "D", "B", "-"]},
+                                index=["seq0", "seq1", "seq2", "seq3"])
+        obs_occurences = _get_occurrences(input_df)
+        exp_occurences = pd.DataFrame({"pos1": [0, 4, 0, 0, 0],
+                                       "pos2": [1, 0, 2, 0, 1],
+                                       "pos3": [1, 2, 0, 1, 0],
+                                       "pos4": [2, 0, 1, 0, 1]},
+                                      index=["-", "A", "B", "C", "D"])
+        pdt.assert_frame_equal(obs_occurences, exp_occurences)
+
+    def test_rank_alphabet_1(self):
+        input_seq = pd.Series(data=[4, 0, 0, 0], index=["A", "B", "C", "-"])
+
+        obs_ranks = _rank_alphabet(input_seq)
+        exp_ranks = {"A": 1, "-": 0}
+        self.assertDictEqual(obs_ranks, exp_ranks)
+
+    def test_rank_alphabet_2(self):
+        input_seq = pd.Series(data=[4, 4, 4, 0], index=["A", "B", "C", "-"])
+
+        obs_ranks = _rank_alphabet(input_seq)
+        exp_ranks = {"A": 3, "B": 2, "C": 1, "-": 0}
+        self.assertDictEqual(obs_ranks, exp_ranks)
+
+    def test_rank_alphabet_3(self):
+        input_seq = pd.Series(data=[4, 0, 4, 6], index=["A", "B", "C", "-"])
+
+        obs_ranks = _rank_alphabet(input_seq)
+        exp_ranks = {"A": 2, "C": 1, "-": 0}
+        self.assertDictEqual(obs_ranks, exp_ranks)
+
+    def test_rank_alphabet_4(self):
+        input_seq = pd.Series(data=[4, 8, 4, 6], index=["A", "B", "C", "-"])
+
+        obs_ranks = _rank_alphabet(input_seq)
+        exp_ranks = {"A": 2, "B": 3, "C": 1, "-": 0}
+        self.assertDictEqual(obs_ranks, exp_ranks)
+
+    def test_rank_columns(self):
+        input_seqs = pd.DataFrame({"pos1": ["A", "A", "A", "A"],
+                                   "pos2": ["-", "B", "B", "D"],
+                                   "pos3": ["A", "C", "A", "-"],
+                                   "pos4": ["-", "D", "B", "-"]},
+                                  index=["seq0", "seq1", "seq2", "seq3"])
+
+        obs_ranks = _rank_columns(input_seqs)
+        exp_ranks = pd.DataFrame({"pos1": [1, 1, 1, 1],
+                                  "pos2": [0, 2, 2, 1],
+                                  "pos3": [2, 1, 2, 0],
+                                  "pos4": [0, 1, 2, 0]},
+                                 index=["seq0", "seq1", "seq2", "seq3"])
+        exp_ranks.index.name = "Sequence ID"
+        pdt.assert_frame_equal(obs_ranks, exp_ranks)
+
     def test_ranking(self):
         input_seqs, exp_ranks = self._prepare_sequences()
         obs_ranks = rank_alignment(input_seqs)
-
         pdt.assert_frame_equal(obs_ranks, exp_ranks)

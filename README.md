@@ -87,7 +87,7 @@ are most conserved within the sequence (e.g. could we identify active center ami
 loadings by running the following command:
 
 ```
-q2 protein-pca plot-loadings --i-pca-loadings thioredoxin-pca-loadings.qza --i-positions-mapping thioredoxin-mapped.qza --o-visualization thioredoxin-pca-loadings.qzv
+qiime protein-pca plot-loadings --i-pca-loadings thioredoxin-pca-loadings.qza --i-positions-mapping thioredoxin-mapped.qza --o-visualization thioredoxin-pca-loadings.qzv
 ```
 
 The scores plot obtained in the first visualisation should look something like:

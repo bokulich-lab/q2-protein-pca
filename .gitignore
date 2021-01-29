@@ -102,3 +102,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+.idea/
+.vscode/
+.DS_Store
+sample_data/*.qza
+sample_data/*.qzv
+
+*.sh

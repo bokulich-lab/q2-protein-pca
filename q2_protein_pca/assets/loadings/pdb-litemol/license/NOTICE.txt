@@ -1,0 +1,7 @@
+Copyright (c) 2021, Michal Ziemski @ Bokulich Lab, ETH Zurich
+
+This package includes software developed at ETH Zurich (https://www.ethz.ch/).
+
+The Initial Developer of the "pdb.litemol.min.css" and "pdb.litemol.min.js" files
+as well as files stored under "loadings/assets/fonts" which are copied or derived
+from PDB LiteMol, is Protein Data Bank Europe (https://www.ebi.ac.uk/pdbe/).

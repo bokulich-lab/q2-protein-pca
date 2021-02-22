@@ -4,6 +4,10 @@
   <script src="vega/js/vega.min.js"></script>
   <script src="vega/js/vega-embed.min.js"></script>
   <link rel="stylesheet" type="text/css" href="vega/css/spinkit.css">
+  
+  <link rel="stylesheet" type="text/css" href="pdb-litemol/pdb.litemol.min.css">
+  <script src="pdb-litemol/angular.min.js"></script>
+  <script src="pdb-litemol/pdb.litemol.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -33,21 +37,17 @@
         <h3>Plot Controls</h3>
       </div>
     </div>
-
     <div class="row">
       <div class="col-lg-12" id="conservation-level-slider"></div>
     </div>
-
     <br>
     <div class="row">
       <div class="col-lg-12" id="sequence-id-selector"></div>
     </div>
-
     <br>
     <div class="row">
       <div class="col-lg-12" id="hide-positions-selector"></div>
     </div>
-
     <br>
     <div class="row">
       <div class="col-lg-12" id="text-field"></div>
@@ -57,6 +57,84 @@
     <div class="row">
       <div class="col-lg-12" id="toolbar"></div>
     </div>
+  </div>
+</div>
+
+{% if pdb_id is defined %}
+<script>
+  (function () {
+    'use strict';
+    angular.element(document).ready(function () {
+        angular.bootstrap(document, ['pdb.litemol']);
+    });
+  }());
+
+</script>
+
+<div class="row">
+
+  <div class="col-lg-8" id="structure-div">
+	<h3>Protein structure</h3>
+    <div class="view3d" id="litemol-app" style="position: relative; margin-top: 10px; margin-bottom: 15px; width: 720px; height: 640px">
+      <pdb-lite-mol id="litemol-vis" pdb-id="'{{ pdb_id }}'" hide-controls="true" source-url="https://www.ebi.ac.uk/pdbe/entry-files/download/pdb{{ pdb_id }}.ent" source-format="pdb"></pdb-lite-mol>
+      <div class="clear-me"></div>
+    </div>
+  </div>
+
+  <div class="col-lg-4" id="structure-controls">
+    <div class="row">
+      <div class="col-lg-12">
+        <h3>Structure controls</h3>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-lg-12 btn-group">
+        <input type="button" class="btn btn-default" value="Reset colors" onclick="resetStructure()">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-lg-12 btn-group">
+        <input type="button" class="btn btn-success" value="Update structure" onclick="updateStructure(structurePositions)">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-lg-12">
+        <label id="show-sticks-label">Show sticks &nbsp;<input type="checkbox" id="show-sticks"></label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <label id="show-ligands-label">Show ligands &nbsp;<input type="checkbox" id="show-ligands"></label>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-lg-12">
+        <label>Structure sequence offset:</label> {{ nterm_offset }} AA
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <h3>Alignment position mapping</h3>
+    <table id="positions-table" class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Position within alignment</th>
+          <th scope="col">PC1</th>
+          <th scope="col">PC2</th>
+          <th scope="col">Position within selected sequence</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
   </div>
 </div>
 
@@ -118,13 +196,10 @@
       .attr("id", "id-picker");
     $(seqId)
       .find("select")
-      .attr("oninput", "updateSelectedSequencePositions();")
+      .attr("oninput", "updateTableToNewSequence();")
     $(seqId)
       .children(".vega-bind-name")
       .replaceWith("<label> Sequence ID &nbsp;</label>");
-    // $(seqId).prepend(
-    //       "<label> Sequence ID &nbsp;</label>"
-    // );
     $(seqId).children("select").addClass("form-control");
 
     var hidePositionsBox = $("#hide-positions-selector .vega-bind");
@@ -133,7 +208,7 @@
       .attr("id", "hide-positions");
     $(hidePositionsBox)
       .find("input")
-      .attr("oninput", "updateSelectedSequencePositions();")
+      .attr("oninput", "updateTableToNewSequence();")
     $(hidePositionsBox)
       .children(".vega-bind-name")
       .replaceWith("<label> Hide missing positions &nbsp;</label>");
@@ -163,7 +238,7 @@
 <div class="row">
   <div class="col-lg-4">
     <div class="row">
-      <div class="col-lg-12" id="sampling-depth-slider">
+      <div class="col-lg-12" id="conservation-level-slider">
         <label> Conservation level [%] &nbsp; </label> <br>
         <input id="range-slider" type="range" min="0" max="100" value="0" class="slider" oninput="sliderHelperFunction(this.value);"> <br>
         <input id="text-box" class="form-control" type="number" value="0" min="0" oninput="textBoxHelperFunction(this.value);"/>
@@ -178,22 +253,6 @@
 
 {% endif %}
 
-<div class="row">
-  <div class="col-lg-8">
-    <table id="feature-table" class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Position within alignment</th>
-          <th scope="col">PC1</th>
-          <th scope="col">PC2</th>
-          <th scope="col">Position within selected sequence</th>
-        </tr>
-      </thead>
-      <tbody id="table-body"></tbody>
-    </table>
-  </div>
-</div>
-
 <script id="position-data" type="application/json">
   {{ position_data }}
 </script>
@@ -201,21 +260,29 @@
 <script type="text/javascript">
   // this is a dirty trick - there must be a way to do it better
   var updateSelectedSequencePositions;
-  var updateTableandText;
+  var updateTableColorsAndText;
   var sliderHelperFunction;
   var textBoxHelperFunction;
+  var cleanUpTable;
+  var populateTable;
+  var updateTableToNewSequence;
+  var checkboxHelperFunction;
+  var bindPdbComponentScope;
+  var bindPdbScope;
+  var showControls;
+  var hideControls;
+  var initAllValues;
+  var resetStructure;
+  var updateStructure;
+  var findPositionsForStructure;
+
+  var structurePositions = [];
 
   $(document).ready(function() {
     var tableBody = document.getElementById("table-body");
-    var table = document.getElementById("feature-table");
     var textField = document.getElementById('text-field');
-    var sequenceIdField = document.getElementById('id-picker')
-
     var pcaData = JSON.parse(document.getElementById('spec').innerHTML).data[0].values
-    console.log(pcaData)
-    console.log(spec)
     var positions = JSON.parse(document.getElementById("position-data").innerHTML);
-    var seqIDs = Object.keys(positions)
 
     // get object keys and store them in an ascending order based on the key value
     // this order is used to create the table rows
@@ -228,19 +295,35 @@
     sortedPositionIDs = Object.keys(pcaData).sort(function(a, b){
       return pcaData[b].euclid_dist - pcaData[a].euclid_dist
     });
-    sortedPositionIDs.forEach(function(element) {
-      var row = tableBody.insertRow(0);
-      var cell1 = row.insertCell(0);
-      var cell2 = row.insertCell(1);
-      var cell3 = row.insertCell(2);
-      var cell4 = row.insertCell(3)
-      cell1.innerHTML = element;
-      cell2.innerHTML = pcaData[element].PC1;
-      cell3.innerHTML = pcaData[element].PC2;
-    });
 
+    // clear and populate table with values
+    populateTable = function () {
+      tableBody.innerHTML = "";
+      sortedPositionIDs.forEach(function(element) {
+        var row = tableBody.insertRow(0);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3)
+        cell1.innerHTML = element;
+        cell2.innerHTML = pcaData[element].PC1;
+        cell3.innerHTML = pcaData[element].PC2;
+      });
+    }
+
+    // remove rows with empty positions
+    cleanUpTable = function () {
+      hideValues= document.getElementById("hide-positions").checked
+      if (hideValues) {
+        emptyRows = Array.from(tableBody.rows).filter(row => row.cells[3].textContent === "")
+        emptyRows.forEach(row => row.parentElement.removeChild(row))
+      }
+    }
+
+    // update positions for the sequence selected from the list
     updateSelectedSequencePositions = function () {
       Array.from(tableBody.rows).forEach(function(row) {
+        var sequenceIdField = document.getElementById('id-picker')
         var cell4 = row.cells[3]
         var alnPosition = row.cells[0].innerHTML
         var seqId = sequenceIdField.options[sequenceIdField.selectedIndex].value
@@ -252,23 +335,26 @@
         }
       })
     }
-    updateSelectedSequencePositions()
 
-    updateTableandText = function (val) {
+    // color rows exceeding conservation threshold and update conservation text
+    updateTableColorsAndText = function (val) {
       var conservationThreshold = val / 100
       var maxDistance = {{ max_distance }}
       var conservedPositions = 0
+      var table = document.getElementById("positions-table");
 
       // start the counter at 1 to ignore the header row
-      for (var i = 1; row = table.rows[i]; i++) {
-        var posId = Number(row.cells[0].innerHTML)
-        if (Number(pcaData[posId].euclid_dist) / maxDistance <= (1 - conservationThreshold)) {
-          row.className = "danger";
-          conservedPositions += 1
-        } else {
-          row.className = "";
+      Array.from(table.rows).forEach(row => {
+        if (row.rowIndex > 0) {
+          var posId = Number(row.cells[0].textContent);
+          if (Number(pcaData[posId].euclid_dist) / maxDistance <= (1 - conservationThreshold)) {
+            row.className = "danger";
+            conservedPositions += 1
+          } else {
+            row.className = "";
+          }
         }
-      }
+      })
 
       if (val === 0){
         textField.innerHTML = defaultDescription;
@@ -278,9 +364,28 @@
         textField.innerHTML = `${conservedPositions} positions (${percentConserved}%) found at a
                                     conservation level of at least ${val}%.`
       }
-
     }
-    updateTableandText(90)
+
+    findPositionsForStructure = function() {
+      var table = document.getElementById("positions-table");
+      structurePositions = [];
+      Array.from(table.rows).forEach(row => {
+        if (row.rowIndex > 0) {
+          var posId = Number(row.cells[0].textContent);
+          if (row.className === "danger" && row.cells[3].innerText !== "") {
+            structurePositions.push(Number(row.cells[3].innerText));
+          }
+        }
+      })
+    }
+
+    updateTableToNewSequence = function() {
+      populateTable();
+      updateSelectedSequencePositions();
+      cleanUpTable();
+      updateTableColorsAndText(document.getElementById("range-slider").value);
+      findPositionsForStructure();
+    }
 
     function updateSliderVal(val) {
       var slider = document.getElementById("range-slider");
@@ -296,7 +401,8 @@
 
     sliderHelperFunction = function (val){
       updateBoxVal(val);
-      updateTableandText(val);
+      updateTableColorsAndText(val);
+      findPositionsForStructure();
     }
 
     textBoxHelperFunction = function (val){
@@ -312,7 +418,67 @@
       }
       updateSliderVal(val);
     }
+
+    // bind component scope
+    bindPdbComponentScope = function(element) {
+        return angular.element(element).isolateScope();
+      }
+
+    // variable to store LiteMol Component Scope which has all the methods
+    var liteMolScope;
+    var liteMolScopeComp;
+
+    // bind to the component scope on window.onload
+    bindPdbScope = function(e) {
+      var litemolElement = document.getElementById('litemol-vis');
+      liteMolScope = bindPdbComponentScope(litemolElement);
+      liteMolScopeComp = liteMolScope.LiteMolComponent
+    }
+
+    showControls = function() {
+      liteMolScopeComp.showControls()
+    }
+
+    hideControls = function(){
+      liteMolScopeComp.hideControls();
+    }
+
+    resetStructure = function() {
+      liteMolScopeComp.resetThemeSelHighlight()
+    }
+
+    updateStructure = function(positions) {
+      let showSticks = document.getElementById("show-sticks").checked;
+      let showLigands = document.getElementById("show-ligands").checked;
+
+      {% if nterm_offset is defined %}
+      const ntermOffset = {{ nterm_offset }};
+      if (ntermOffset > 0) { positions = positions.map(e => e - ntermOffset)}
+      {% endif %}
+
+      liteMolScope.LiteMolComponent.colorResidues(
+        positions, {r:37, g:150, b:190}, showSticks, showLigands
+      )
+    }
+
+    initAllValues = function() {
+      populateTable();
+      updateSelectedSequencePositions();
+      cleanUpTable();
+      updateTableColorsAndText(90);
+
+      {% if pdb_id is defined %}
+      bindPdbScope();
+      findPositionsForStructure();
+      {% endif %}
+
+      // that somehow doesn't work
+      // updateStructure(structurePositions);
+    }
+
+    initAllValues()
   });
+
 </script>
 
 {% endblock %}

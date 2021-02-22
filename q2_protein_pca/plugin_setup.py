@@ -106,10 +106,15 @@ plugin.visualizers.register_function(
     function=q2_protein_pca.plot_loadings,
     inputs={'pca_loadings': PCoAResults,
             'positions_mapping': FeatureData[PositionMapping]},
-    parameters={},
+    parameters={'pdb_id': Str, 'nterm_offset': Int % Range(0, None)},
     input_descriptions={'pca_loadings': 'PCA loadings.',
                         'positions_mapping': 'Amino acid positions mapping.'},
-    parameter_descriptions={},
+    parameter_descriptions={'pdb_id': 'PDB ID of the protein structure to '
+                                      'display conserved positions on.',
+                            'nterm_offset': 'Number of the amino acids that'
+                                            'are missing from the N-terminus'
+                                            'of the PDB structure. Defaults'
+                                            'to 1.'},
     name='PCA loadings plot',
     description=(
         'Visualise principal component loadings to find which positions '

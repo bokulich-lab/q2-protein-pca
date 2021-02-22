@@ -34,6 +34,9 @@ setup(
             'assets/loadings/vega/css/*',
             'assets/loadings/vega/js/*',
             'assets/loadings/vega/licenses/*',
+            'assets/loadings/pdb-litemol/*',
+            'assets/loadings/pdb-litemol/license/*',
+            'assets/loadings/assets/fonts/*'
         ],
         'q2_protein_pca.tests': ['data/*'],
     },

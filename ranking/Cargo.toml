@@ -1,0 +1,17 @@
+[package]
+name = "aln_ranking"
+version = "0.1.0"
+authors = ["Michal Ziemski <ziemski.michal@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "aln_ranking"
+crate-type = ["cdylib"]
+
+[dependencies]
+numpy = "0.13"
+ndarray = "0.14"
+
+[dependencies.pyo3]
+version = "0.13"
+features = ["extension-module"]

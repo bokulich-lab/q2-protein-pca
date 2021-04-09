@@ -14,3 +14,7 @@ from ._ranking import rank_alignment
 __version__ = "2020.08"
 
 __all__ = ['mafft', 'map_positions', 'pca', 'plot_loadings', 'rank_alignment']
+
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions

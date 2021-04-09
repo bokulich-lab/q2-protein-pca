@@ -10,9 +10,12 @@
 
 from setuptools import find_packages, setup
 
+import versioneer
+
 setup(
     name='q2-protein-pca',
-    version='2020.08',
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     license='BSD-3-Clause',
     packages=find_packages(),
     install_requires=['biopython>=1.78', 'scikit-learn', 'pandas',
@@ -21,7 +24,7 @@ setup(
     author_email="ziemski.michal@gmail.com",
     description=("Dimensionality reduction of protein sequences using "
                  "PCA on ranked sequence alignments."),
-    url="https://github.com/misialq/pca-protein-analysis",
+    url="https://github.com/bokulich-lab/q2-protein-pca",
     entry_points={
         'qiime2.plugins':
         ['q2-protein-pca=q2_protein_pca.plugin_setup:plugin']

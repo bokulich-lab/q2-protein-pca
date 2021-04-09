@@ -16,8 +16,6 @@ setup(
     cmdclass=versioneer.get_cmdclass(),
     license='BSD-3-Clause',
     packages=find_packages(),
-    install_requires=['biopython>=1.78', 'scikit-learn', 'pandas',
-                      'numpy', 'matplotlib'],
     author="Michal Ziemski",
     author_email="ziemski.michal@gmail.com",
     description=("Dimensionality reduction of protein sequences using "

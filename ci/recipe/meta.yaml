@@ -1,0 +1,39 @@
+{% set data = load_setup_py_data() %}
+{% set version = data.get('version') or 'placehold' %}
+{% set release = '.'.join(version.split('.')[:2]) %}
+
+package:
+  name: q2-protein-pca
+  version: {{ version }}
+
+source:
+  path: ../..
+
+build:
+  script: make install
+
+requirements:
+  host:
+    - python {{ python }}
+    - setuptools
+
+  run:
+    - python {{ python }}
+    - scikit-learn
+    - pandas
+    - numpy
+    - matplotlib
+    - qiime2 {{ release }}.*
+    - q2templates {{ release }}.*
+    - q2-types {{ release }}.*
+    - q2-alignment {{ release }}.*
+
+test:
+  imports:
+    - q2_protein_pca
+    - qiime2.plugins.protein_pca
+
+about:
+  home: https://github.com/bokulich-lab/q2-protein-pca
+  license: BSD-3-Clause
+  license_family: BSD

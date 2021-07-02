@@ -1,3 +1,10 @@
+# ----------------------------------------------------------------------------
+# Copyright (c) 2021, QIIME 2 development team.
+#
+# Distributed under the terms of the Modified BSD License.
+#
+# The full license is in the file LICENSE, distributed with this software.
+# ----------------------------------------------------------------------------
 
 EXPECTED_SPEC = {
     '$schema': 'https://vega.github.io/schema/vega/v4.2.json',

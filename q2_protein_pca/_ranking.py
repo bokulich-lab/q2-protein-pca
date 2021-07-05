@@ -28,49 +28,6 @@ def _get_occurrences(df: pd.DataFrame) -> pd.DataFrame:
     return df.apply(pd.value_counts).fillna(0).astype("int")
 
 
-# def _rank_alphabet(aa_series: pd.Series) -> dict:
-#     ranks_df = pd.DataFrame(
-#         {"aa": aa_series.index, "count": aa_series.values}
-#     )
-#
-#     # remove gaps and aas with no occurence at a given position
-#     ranks_df = ranks_df[(ranks_df["aa"] != "-") & (ranks_df["count"] != 0)]
-#
-#     # sort by occurence and reverse-alphabetically
-#     ranks_df.sort_values(
-#         by=["count", "aa"], ascending=[True, False], inplace=True)
-#
-#     # rank the aas according to the order
-#     ranks_df["rank"] = range(1, ranks_df.shape[0] + 1)
-#
-#     # convert to dict
-#     ranks_dict = {
-#         row["aa"]: row["rank"] for index, row in ranks_df.iterrows()
-#     }
-#
-#     # replace gap (-) counts with 0
-#     ranks_dict.update({"-": 0})
-#
-#     return ranks_dict
-
-
-# def _rank_columns(alignment_df: pd.DataFrame) -> pd.DataFrame:
-#     occurence_freqs = _get_occurrences(alignment_df)
-#
-#     # calculate AA ranks
-#     aa_ranks = occurence_freqs.apply(_rank_alphabet, axis=0)
-#
-#     # replace original AAs with their ranks
-#     aa_ranks_dict = aa_ranks.to_dict()
-#
-#     # aa_ranks_new = dict()
-#     # for key in aa_ranks_dict.keys():
-#     #     aa_ranks_new[f"pos{int(key)}"] = aa_ranks_dict[key]
-#
-#     aln_df_ranked = alignment_df.replace(aa_ranks_dict)
-#     aln_df_ranked.index.name = "Sequence ID"
-#     return aln_df_ranked.astype("int")
-
 def _rank_columns(alignment_df: pd.DataFrame) -> pd.DataFrame:
     aln_unranked = alignment_df.replace(AA_MAP).astype(np.uint32).values
     aln_ranked = rank.rank_sequences(aln_unranked)

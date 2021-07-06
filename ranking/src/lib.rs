@@ -110,7 +110,7 @@ mod tests {
         exp.insert(6, 1);
         exp.insert(2, 3);
         exp.insert(1, 2);
-        exp.insert(0, 1);
+        exp.insert(0, 0);
 
         assert_eq!(obs.len(), exp.len());
         assert_eq!(exp.keys().all(|k| obs.contains_key(k)), true);

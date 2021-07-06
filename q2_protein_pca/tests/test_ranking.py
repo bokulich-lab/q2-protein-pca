@@ -16,7 +16,7 @@ from qiime2.plugin.testing import TestPluginBase
 from q2_protein_pca import rank_alignment
 from q2_protein_pca._format import RankedProteinAlignmentFormat
 from q2_protein_pca._ranking import (
-    _get_occurrences, _df_from_sequences, _rank_alphabet, _rank_columns)
+    _get_occurrences, _df_from_sequences, _rank_columns)
 
 
 class RankingTests(TestPluginBase):
@@ -59,34 +59,6 @@ class RankingTests(TestPluginBase):
                                        "pos4": [2, 0, 1, 0, 1]},
                                       index=["-", "A", "B", "C", "D"])
         pdt.assert_frame_equal(obs_occurences, exp_occurences)
-
-    def test_rank_alphabet_1(self):
-        input_seq = pd.Series(data=[4, 0, 0, 0], index=["A", "B", "C", "-"])
-
-        obs_ranks = _rank_alphabet(input_seq)
-        exp_ranks = {"A": 1, "-": 0}
-        self.assertDictEqual(obs_ranks, exp_ranks)
-
-    def test_rank_alphabet_2(self):
-        input_seq = pd.Series(data=[4, 4, 4, 0], index=["A", "B", "C", "-"])
-
-        obs_ranks = _rank_alphabet(input_seq)
-        exp_ranks = {"A": 3, "B": 2, "C": 1, "-": 0}
-        self.assertDictEqual(obs_ranks, exp_ranks)
-
-    def test_rank_alphabet_3(self):
-        input_seq = pd.Series(data=[4, 0, 4, 6], index=["A", "B", "C", "-"])
-
-        obs_ranks = _rank_alphabet(input_seq)
-        exp_ranks = {"A": 2, "C": 1, "-": 0}
-        self.assertDictEqual(obs_ranks, exp_ranks)
-
-    def test_rank_alphabet_4(self):
-        input_seq = pd.Series(data=[4, 8, 4, 6], index=["A", "B", "C", "-"])
-
-        obs_ranks = _rank_alphabet(input_seq)
-        exp_ranks = {"A": 2, "B": 3, "C": 1, "-": 0}
-        self.assertDictEqual(obs_ranks, exp_ranks)
 
     def test_rank_columns(self):
         input_seqs = pd.DataFrame({"pos1": ["A", "A", "A", "A"],

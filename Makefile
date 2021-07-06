@@ -15,7 +15,9 @@ test-cov: all
 	py.test --cov=q2_protein_pca
 
 install: all
+	maturin build --release -m ranking/Cargo.toml
 	$(PYTHON) setup.py install
+	$(PYTHON) -m pip install --no-deps aln_ranking --find-links ranking/target/wheels/
 
 dev: all
 	pip install -e .

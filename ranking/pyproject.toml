@@ -1,0 +1,17 @@
+[build-system]
+build-backend = "maturin"
+
+[tool.poetry]
+name = "aln_ranking"
+version = "0.1.0"
+description = "Alignment ranking in rust."
+authors = ["Michal Ziemski <mziemski@ethz.ch>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+numpy = ">=1.18"
+maturin = "^0.10.0"
+pandas = "^1.2.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.1"

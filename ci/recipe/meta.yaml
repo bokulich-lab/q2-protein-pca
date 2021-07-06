@@ -13,6 +13,10 @@ build:
   script: make install
 
 requirements:
+  build:
+    - maturin
+    - rust ==1.51.0
+
   host:
     - python {{ python }}
     - setuptools
@@ -32,6 +36,7 @@ test:
   imports:
     - q2_protein_pca
     - qiime2.plugins.protein_pca
+    - aln_ranking
 
 about:
   home: https://github.com/bokulich-lab/q2-protein-pca

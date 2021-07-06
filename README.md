@@ -7,24 +7,18 @@ QIIME 2 plugin for PCA analysis of protein sequences, as described by Wang & Ken
 Create a new conda environment and install required dependencies:
 
 ```
-conda create -y -n protein-pca
-conda activate protein-pca
-conda install \
+conda create -yn protein-pca \
   -c conda-forge -c bioconda -c qiime2 -c defaults \
-  qiime2 q2cli q2templates q2-types q2-alignment q2-emperor "pandas==0.25.3"
-```
-
-This plugin requires new types and formats to work with protein sequences. Before those are officially added to the
-q2-types plugin, you will need to install q2-types from the respective branch by doing:
-
-```
-pip install https://github.com/misialq/q2-types/archive/protein-seqs.zip
+  qiime2 q2cli q2templates q2-types q2-alignment q2-emperor click==7.1.2
+conda activate protein-pca
 ```
 
 Finally, install q2-protein-pca:
 
 ```
-pip install git+https://github.com/bokulich-lab/q2-protein-pca.git
+conda install -y \
+  -c https://packages.qiime2.org/qiime2/2021.8/tested \
+  --no-deps q2-protein-pca
 ```
 
 To see actions available within the q2-protein-pca plugin:

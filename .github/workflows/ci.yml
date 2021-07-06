@@ -29,6 +29,16 @@ jobs:
           pip install -q flake8
           flake8
 
+  rust-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo test
+        working-directory: ./ranking
+
   build-and-test:
     needs: lint
     strategy:

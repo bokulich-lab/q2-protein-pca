@@ -67,3 +67,53 @@ fn _convert_to_ranks(sorted_occurrs: &Vec<(&u32, &u32)>) -> HashMap<u32, u32> {
     ranks.insert(0, 0);
     ranks
 }
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_count_occurences() {
+        let input = ArrayView1::from(&[0, 2, 0, 1, 0, 2, 2]);
+
+        let obs = _count_occurrences(&input);
+        let mut exp = HashMap::new();
+        exp.insert(1, 1);
+        exp.insert(2, 3);
+
+        assert_eq!(obs, exp)
+    }
+
+    #[test]
+    fn test_sort_occurences() {
+        let mut input = HashMap::new();
+        input.insert(1, 2);
+        input.insert(2, 3);
+        input.insert(3, 4);
+        input.insert(4, 4);
+        input.insert(6, 2);
+
+        let obs = _sort_occurrences(&input);
+        let exp: [(&u32, &u32); 5] = [(&3, &4), (&4, &4), (&2, &3), (&1, &2), (&6, &2)];
+        let test = exp.iter().zip(obs).all(|(e, o)| *e == o);
+
+        assert_eq!(test, true);
+    }
+
+    #[test]
+    fn test_convert_to_ranks() {
+        let input = vec![(&3, &4), (&4, &4), (&2, &3), (&1, &2), (&6, &2)];
+
+        let obs = _convert_to_ranks(&input);
+        let mut exp = HashMap::new();
+        exp.insert(4, 4);
+        exp.insert(3, 5);
+        exp.insert(6, 1);
+        exp.insert(2, 3);
+        exp.insert(1, 2);
+        exp.insert(0, 0);
+
+        assert_eq!(obs.len(), exp.len());
+        assert_eq!(exp.keys().all(|k| obs.contains_key(k)), true);
+        assert_eq!(exp.iter().all(|(k, v)| obs[k] == *v), true);
+    }
+}

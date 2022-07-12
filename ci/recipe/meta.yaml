@@ -1,6 +1,5 @@
 {% set data = load_setup_py_data() %}
 {% set version = data.get('version') or 'placehold' %}
-{% set release = '.'.join(version.split('.')[:2]) %}
 
 package:
   name: q2-protein-pca
@@ -27,16 +26,21 @@ requirements:
     - pandas
     - numpy
     - matplotlib
-    - qiime2 {{ release }}.*
-    - q2templates {{ release }}.*
-    - q2-types {{ release }}.*
-    - q2-alignment {{ release }}.*
+    - qiime2 {{ qiime2_epoch }}.*
+    - q2templates {{ qiime2_epoch }}.*
+    - q2-types {{ qiime2_epoch }}.*
+    - q2-alignment {{ qiime2_epoch }}.*
 
 test:
+  requires:
+    - coverage
+    - pytest-cov
   imports:
     - q2_protein_pca
     - qiime2.plugins.protein_pca
     - aln_ranking
+  commands:
+    - pytest --cov q2_protein_pca --pyargs q2_protein_pca
 
 about:
   home: https://github.com/bokulich-lab/q2-protein-pca

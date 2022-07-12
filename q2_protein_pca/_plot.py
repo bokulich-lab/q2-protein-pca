@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# Copyright (c) 2021, QIIME 2 development team.
+# Copyright (c) 2022, QIIME 2 development team.
 #
 # Distributed under the terms of the Modified BSD License.
 #
@@ -27,14 +27,17 @@ def _generate_spec(plot_values: pd.DataFrame,
                    x_col_name: str,
                    y_col_name: str,
                    sequence_ids: list) -> dict:
+    # replace NaNs
+    plot_values = plot_values.replace({np.nan: None})
+    # convert types to object (json.dumps cannot dump pandas' Int64)
+    plot_values.iloc[:, 5:] = plot_values.iloc[:, 5:].astype(object)
     spec = {
         '$schema': 'https://vega.github.io/schema/vega/v4.2.json',
         'width': 300,
         'height': 300,
         'data': [
             {'name': 'values',
-             'values': plot_values.replace(
-                 {np.nan: None}).to_dict(orient='records')},
+             'values': plot_values.to_dict(orient='records')},
         ],
         'scales': [
             {'name': 'xScale',

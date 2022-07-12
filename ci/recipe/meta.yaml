@@ -13,7 +13,7 @@ build:
 
 requirements:
   build:
-    - maturin ==0.10.0
+    - maturin ==0.10.3
     - rust ==1.51.0
 
   host:

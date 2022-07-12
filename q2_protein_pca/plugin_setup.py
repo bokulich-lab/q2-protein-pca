@@ -24,7 +24,7 @@ citations = Citations.load('citations.bib', package='q2_protein_pca')
 plugin = Plugin(
     name='protein-pca',
     version=q2_protein_pca.__version__,
-    website="https://github.com/misialq/pca-protein-analysis",
+    website="https://github.com/bokulich-lab/q2-protein-pca",
     package='q2_protein_pca',
     description=(
         'This QIIME 2 plugin supports methods for PCA analysis of ranked'

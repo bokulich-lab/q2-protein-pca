@@ -4,28 +4,23 @@ QIIME 2 plugin for PCA analysis of protein sequences, as described by Wang & Ken
 
 ## Installation
 
-Create a new conda environment and install required dependencies:
-
+Install mamba into your base environment (if not already done):
+```shell
+conda install mamba -n base -c conda-forge
 ```
-conda create -yn protein-pca \
-  -c conda-forge -c bioconda -c qiime2 -c defaults \
-  qiime2 q2cli q2templates q2-types q2-alignment q2-emperor click==7.1.2
+
+Create a new conda environment and install q2-protein-pca with its dependencies:
+```shell
+mamba create -yn protein-pca \
+  -c conda-forge -c bioconda -c https://packages.qiime2.org/qiime2/2022.4/tested -c defaults \
+  q2-protein-pca q2cli q2-emperor
 conda activate protein-pca
 ```
 
-Finally, install q2-protein-pca:
-
-```
-conda install -y \
-  -c https://packages.qiime2.org/qiime2/2021.8/tested \
-  --no-deps q2-protein-pca
-```
-
 To see actions available within the q2-protein-pca plugin:
-
-```
+```shell
 qiime dev refresh-cache
-qiime --help
+qiime protein-pca --help
 ```
 
 ## Usage
